@@ -19,7 +19,7 @@ else:
     weight2 = random.uniform(0.8, 1.2)
     weight3 = random.uniform(0.8, 1.2)
     bias = random.uniform(-0.2, 0.2)
-learn_rate = 0.00000001
+learn_rate = 0.09
 def make_move(first_last_play, second_last_play, third_last_play, last_winner):
     global bias, weight1, weight2, weight3
     first_tokens = 0
