@@ -1,4 +1,4 @@
-from dumb_bot.dumb_bot import make_move
+from dumb_bot import make_move
 
 last_play = None
 last_winner = None

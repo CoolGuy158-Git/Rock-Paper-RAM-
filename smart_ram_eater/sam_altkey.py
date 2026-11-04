@@ -25,7 +25,7 @@ def make_move(first_last_play, second_last_play, third_last_play, last_winner):
     first_tokens = 0
     second_tokens = 0
     third_tokens = 0
-    if last_winner == "User":
+    if last_winner == "User" or last_winner == "Dumb wins": # Realized this never works in the two bots arena so just added an or
         add = 0.01
     else:
         add = 0.02
@@ -62,31 +62,44 @@ def make_move(first_last_play, second_last_play, third_last_play, last_winner):
 
     return {1: "p", 2: "r", 3: "s"}[predicted_token]
 
-def learn(first_player_input, second_player_input, third_player_input, actual_next_play):
+def learn(first_player_input, second_player_input, third_player_input, actual_next_play, last_winner):
     global weight1, weight2, weight3, learn_rate, bias
+
+    if last_winner == "User" or last_winner == "Dumb wins": # Realized this never works in the two bots arena so just added an or
+        add = 0.01
+    else:
+        add = 0.02
+    # Add reinforcement(yyy) learning
+    if last_winner == "User" or last_winner == "Dumb wins":
+        reward = -2.0
+    elif last_winner == "Computer" or last_winner == "Smart wins":
+        reward = 2.0
+    else:
+        reward = -0.5
+    # Fixed inconsistency in train and learn by adding ts
     first_token = 0
     second_token = 0
     third_token = 0
     if first_player_input.lower() == "p":
-        first_token = 1
+        first_token = 1 + add
     elif first_player_input.lower() == "r":
-        first_token = 2
+        first_token = 2 + add
     elif first_player_input.lower() == "s":
-        first_token = 3
+        first_token = 3 + add
 
     if second_player_input.lower() == "p":
-        second_token = 1
+        second_token = 1 + add
     elif second_player_input.lower() == "r":
-        second_token = 2
+        second_token = 2 + add
     elif second_player_input.lower() == "s":
-        second_token = 3
+        second_token = 3 + add
 
     if third_player_input.lower() == "p":
-        third_token = 1
+        third_token = 1 + add
     elif third_player_input.lower() == "r":
-        third_token = 2
+        third_token = 2 + add
     elif third_player_input.lower() == "s":
-        third_token = 3
+        third_token = 3 + add
 
     target = {"p": 1, "r": 2, "s": 3}[actual_next_play.lower()]
 
@@ -94,9 +107,9 @@ def learn(first_player_input, second_player_input, third_player_input, actual_ne
     prediction = max(0, raw_prediction)
     error = target - prediction
 
-    weight1 += learn_rate * error * first_token
-    weight2 += learn_rate * error * second_token
-    weight3 += learn_rate * error * third_token
+    weight1 += learn_rate * error * first_token + reward * first_token
+    weight2 += learn_rate * error * second_token + reward * second_token
+    weight3 += learn_rate * error * third_token + reward * third_token
     bias += learn_rate * error
 
     with open("model.txt", "w") as file:

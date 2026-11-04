@@ -1,4 +1,4 @@
-from sam_altkey import make_move, learn, save_model_manually
+from smart_ram_eater.sam_altkey import make_move, learn, save_model_manually
 import keyboard
 import time
 import sys
@@ -41,7 +41,7 @@ while True:
     else:
         winner = "Draw"
     if len(history) >= 3:
-        learn(history[-3], history[-2], history[-1], user_play)
+        learn(history[-3], history[-2], history[-1], user_play, last_winner)
 
     history.append(user_play.lower())
     history = history[-3:]
